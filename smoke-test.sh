@@ -10,7 +10,11 @@ SERVER=http://localhost:8888/v1
 http --check-status PUT $SERVER/buckets/source --auth user:pass
 http --check-status PUT $SERVER/buckets/source/collections/source --auth user:pass
 
-http --check-status $SERVER/__heartbeat__
+# Run 20 requests on heartbeat in parallel and wait...
+for i in {1..20}; do
+  http --check-status $SERVER/__heartbeat__ &
+done
+wait < <(jobs -p)
 
 # kinto-attachment test
 curl -O "http://kinto.readthedocs.io/en/stable/_images/kinto-logo.png"
