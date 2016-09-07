@@ -12,7 +12,7 @@ http --check-status PUT $SERVER/buckets/source/collections/source --auth user:pa
 
 # Run 20 requests on heartbeat in parallel and wait...
 for i in {1..20}; do
-  http --check-status $SERVER/__heartbeat__ &
+  http --check-status GET $SERVER/__heartbeat__ &
 done
 wait < <(jobs -p)
 
