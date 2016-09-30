@@ -7,6 +7,8 @@ pip install httpie kinto-http
 
 SERVER="${SERVER:-http://localhost:8888/v1}"
 AUTH="${AUTH:-user:pass}"
+EDITOR_AUTH="${EDITOR_AUTH:-editor:pass}"
+REVIEWER_AUTH="${REVIEWER_AUTH:-reviewer:pass}"
 
 http --check-status PUT $SERVER/buckets/source --auth $AUTH
 http --check-status PUT $SERVER/buckets/source/collections/source --auth $AUTH
@@ -23,7 +25,7 @@ http --check-status --form POST $SERVER/buckets/source/collections/source/record
 
 # kinto-signer test
 curl -O https://raw.githubusercontent.com/Kinto/kinto-signer/master/scripts/e2e.py
-python e2e.py --server="http://localhost:8888/v1" --source-bucket=source --source-col=source --dest-bucket=destination --dest-col=destination
+python e2e.py --server=$SERVER --auth=$AUTH --editor-auth=$EDITOR_AUTH --reviewer-auth=$REVIEWER_AUTH --source-bucket=source --source-col=source
 
 # kinto-changes
 http --check-status $SERVER/buckets/monitor/collections/changes/records | grep '"destination"'
